@@ -27,13 +27,19 @@ $(function(){
 $(".msg #nomore").click(function(){$(".msg").remove();});
 //关闭登录界面
 $("#login_close").click(function(){
-	$("#shade").attr("style","display:none");
+	console.log("got");
+	bounceOutById("login",1,function(){
+		document.getElementById("shade").style.display="none";
+		document.getElementById("login").style.animation="bounceIn 1s";
+		});
 });
+
+
 //关注切换
 $("#focus").click(function(){
 	var loginF=sessionStorage.getItem("loginSuc");
 	if(loginF==1) {
-			$("#focus").hide();
+		$("#focus").hide();
 		$("#ufocus").show();
 	}
 	if(loginF!=1) {
@@ -89,8 +95,6 @@ $("#login button").click(function(){
 
 //课程重载
 var pageChange=function(pageNo,psize,type){
-	console.log("have click");	
-
 	var listJs;
 	var xhr=new XMLHttpRequest();
 var url="http://study.163.com/webDev/couresByCategory.htm";
@@ -99,7 +103,6 @@ xhr.send(null);
 
 xhr.onreadystatechange=function(){			
 	if (xhr.readyState==4&&xhr.status==200){
-		console.log("have recieved");
 		listJs=JSON.parse(xhr.responseText);
 		console.log(listJs.list[0].name)	
 
@@ -196,9 +199,16 @@ function getCookie (name) {
 		}
 	}
 }
+//淡出函数
+function bounceOutById(nodeId,time,callback) {
+	document.getElementById(nodeId).style.animation="bounceOut "+time+"s";
+	setTimeout(callback,time*800);	
+}
 //视频页面
 function closeVideo(){
-	document.getElementById("shade1").style.display="none";
+	bounceOutById("video",1,function(){document.getElementById("shade1").style.display="none";
+							document.getElementById("video").style.animation="bounceIn 1s";
+							})	
 	document.getElementsByTagName("video")[0].pause();
 }
 //视频页面
